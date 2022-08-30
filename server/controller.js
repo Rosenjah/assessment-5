@@ -235,17 +235,16 @@ module.exports = {
     sequelize.query(`
       select *
       from countries;
-    `).then(() => {
-      console.log('Country list retrieved!')
-      dbRes => res.status(200).send(dbRes[0])
-    }).catch(err => console.log('error: Could not get countries list', err))
+    `)
+      .then((dbRes) => res.status(200).send(dbRes[0]))
+      .catch(err => console.log('error: Could not get countries list', err))
   },
 
   createCity: (req, res) => {
     console.log(req.body)
     let name = req.body.name
     let rating = req.body.rating
-    let country_id = req.body.country_id
+    let country_id = req.body.country_id || 5
 
     sequelize.query(`
       insert into cities (name, rating, country_id)
@@ -263,11 +262,9 @@ module.exports = {
              join countries
                   ON cities.country_id = countries.country_id
       order by rating desc;
-    `).then(() => {
-      console.log('Cities selected!')
-      dbRes => res.status(200).send(dbRes[0])
-      console.log(dbRes[0])
-    }).catch(err => console.log('error: Could not select cities', err))
+    `)
+      .then((dbRes) => res.status(200).send(dbRes[0]))
+      .catch(err => console.log('error: Could not select cities', err))
   },
 
   deleteCity: (req, res) => {
@@ -280,6 +277,6 @@ module.exports = {
       console.log('City deleted successfully!')
       dbRes => res.status(200).send(dbRes[0])
     }).catch(err => console.log('error: Could not delete city.', err))
-  },
-
+  }
 }
+
